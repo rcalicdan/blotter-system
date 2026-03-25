@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('hearing_attendees', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('hearing_id')->constrained('hearings')->cascadeOnDelete();
+            $table->foreignId('person_id')->constrained('persons');
+            $table->boolean('attended')->default(false);
+
+            $table->index('hearing_id');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('hearing_attendees');
+    }
+};
