@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Person extends Model
 {
@@ -15,6 +16,7 @@ class Person extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'photo',
         'birthdate',
         'address',
         'contact_number',
@@ -30,6 +32,16 @@ class Person extends Model
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getInitialsAttribute(): string
+    {
+        return strtoupper(substr($this->first_name, 0, 1) . substr($this->last_name, 0, 1));
+    }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        return $this->photo ? Storage::url($this->photo) : null;
     }
 
     public function blotterParties(): HasMany
