@@ -19,11 +19,19 @@ enum UserRole: string
     {
         return match ($this) {
             self::SuperAdmin, self::Admin => true,
-            default => false,
+            default                       => false,
         };
     }
 
-    public function canUpdate(self $targetRole): bool
+    public function canModify(): bool
+    {
+        return match ($this) {
+            self::SuperAdmin, self::Admin => true,
+            default                       => false,
+        };
+    }
+
+    public function canUpdateUser(self $targetRole): bool
     {
         return match ($this) {
             self::SuperAdmin => true,
@@ -32,7 +40,7 @@ enum UserRole: string
         };
     }
 
-    public function canDelete(self $targetRole): bool
+    public function canDeleteUser(self $targetRole): bool
     {
         return match ($this) {
             self::SuperAdmin => true,

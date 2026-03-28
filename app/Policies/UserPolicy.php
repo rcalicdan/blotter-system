@@ -29,7 +29,7 @@ class UserPolicy
             return false;
         }
 
-        return $authUser->role->canUpdate($targetUser->role);
+        return $authUser->role->canUpdateUser($targetUser->role);
     }
 
     public function delete(User $authUser, User $targetUser): bool
@@ -38,6 +38,6 @@ class UserPolicy
             return false;
         }
 
-        return $authUser->role->canDelete($targetUser->role);
+        return $authUser->role->canDeleteUser($targetUser->role);
     }
 }
