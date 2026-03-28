@@ -31,7 +31,7 @@
                 <x-table.cell header sortable sortField="email" class="hidden md:table-cell">Email</x-table.cell>
                 <x-table.cell header sortable sortField="role" class="hidden sm:table-cell">Role</x-table.cell>
                 <x-table.cell header sortable sortField="created_at" class="hidden lg:table-cell">Joined</x-table.cell>
-                <x-table.cell header class="text-right">Actions</x-table.cell>
+                <x-table.cell header class="text-center">Actions</x-table.cell>
             </x-table.head>
 
             <x-table.body>
@@ -96,8 +96,8 @@
                         </x-table.cell>
 
                         {{-- Actions --}}
-                        <x-table.cell class="text-right">
-                            <div class="flex items-center justify-end gap-2">
+                        <x-table.cell class="text-center align-middle">
+                            <div class="flex items-center justify-center gap-2">
                                 <x-ui.edit-button :href="route('users.edit', $user)" />
 
                                 @if ($user->id !== auth()->id())
