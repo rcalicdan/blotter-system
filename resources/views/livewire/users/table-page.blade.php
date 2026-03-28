@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage system users and their roles.</p>
         </div>
-        <x-ui.button href="#"
+        <x-ui.button href="{{ route('users.create') }}"
             icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>'>
             <span class="hidden sm:inline">Add User</span>
         </x-ui.button>
@@ -45,7 +45,8 @@
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <p class="font-semibold text-gray-900 dark:text-white">{{ $user->name }}</p>
                                         @if ($user->id === auth()->id())
-                                            <span class="text-[10px] font-bold text-red-600 uppercase tracking-wider">You</span>
+                                            <span
+                                                class="text-[10px] font-bold text-red-600 uppercase tracking-wider">You</span>
                                         @endif
                                     </div>
                                     {{-- Shown only on mobile --}}
@@ -56,9 +57,9 @@
                                         @php
                                             $roleVariant = match ($user->role) {
                                                 \App\Enums\UserRole::SuperAdmin => 'danger',
-                                                \App\Enums\UserRole::Admin      => 'warning',
-                                                \App\Enums\UserRole::Staff      => 'info',
-                                                default                         => 'secondary',
+                                                \App\Enums\UserRole::Admin => 'warning',
+                                                \App\Enums\UserRole::Staff => 'info',
+                                                default => 'secondary',
                                             };
                                         @endphp
                                         <x-ui.badge :variant="$roleVariant">
@@ -79,9 +80,9 @@
                             @php
                                 $roleVariant = match ($user->role) {
                                     \App\Enums\UserRole::SuperAdmin => 'danger',
-                                    \App\Enums\UserRole::Admin      => 'warning',
-                                    \App\Enums\UserRole::Staff      => 'info',
-                                    default                         => 'secondary',
+                                    \App\Enums\UserRole::Admin => 'warning',
+                                    \App\Enums\UserRole::Staff => 'info',
+                                    default => 'secondary',
                                 };
                             @endphp
                             <x-ui.badge :variant="$roleVariant">
