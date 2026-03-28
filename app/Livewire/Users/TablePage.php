@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Users;
 
 use App\Enums\UserRole;
@@ -13,7 +15,8 @@ use Livewire\WithPagination;
 #[Title('User Management')]
 class TablePage extends Component
 {
-    use WithPagination, WithSorting;
+    use WithPagination;
+    use WithSorting;
 
     #[Url(except: '')]
     public string $search = '';
@@ -39,6 +42,7 @@ class TablePage extends Component
 
         if ($user->id === auth()->id()) {
             $this->dispatch('notify', message: 'You cannot delete your own account.', type: 'error');
+
             return;
         }
 
@@ -53,12 +57,14 @@ class TablePage extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('email', 'like', "%{$this->search}%");
+                        ->orWhere('email', 'like', "%{$this->search}%")
+                    ;
                 });
             })
             ->when($this->roleFilter, fn ($query) => $query->where('role', $this->roleFilter))
             ->tap(fn ($query) => $this->applySorting($query))
-            ->paginate(10);
+            ->paginate(10)
+        ;
 
         return view('livewire.users.table-page', [
             'users' => $users,

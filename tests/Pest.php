@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Tests\TestCase;
 
 /*
@@ -15,7 +17,8 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
  // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature')
+;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\ResolutionType;
@@ -26,7 +28,7 @@ class Resolution extends Model
     {
         return [
             'resolution_type' => ResolutionType::class,
-            'resolved_at'     => 'datetime',
+            'resolved_at' => 'datetime',
         ];
     }
 

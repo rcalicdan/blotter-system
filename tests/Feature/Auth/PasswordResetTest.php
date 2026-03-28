@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function () {
     $this->skipUnlessFortifyFeature(Features::resetPasswords());
@@ -60,7 +62,8 @@ test('password can be reset with valid token', function () {
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('login', absolute: false));
+            ->assertRedirect(route('login', absolute: false))
+        ;
 
         return true;
     });

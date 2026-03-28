@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Laravel\Fortify\Features;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
     $response = $this->get(route('login'));
@@ -21,7 +23,8 @@ test('users can authenticate using the login screen', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('dashboard', absolute: false))
+    ;
 
     $this->assertAuthenticated();
 });

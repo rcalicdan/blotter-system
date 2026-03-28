@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -39,7 +41,8 @@ trait WithRelationshipSorting
 
         return $relatedModel::select($column)
             ->whereColumn("{$table}.id", $foreignKey)
-            ->limit(1);
+            ->limit(1)
+        ;
     }
 
     protected function getForeignKeyForRelation(string $relation): string

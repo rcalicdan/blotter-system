@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\UserRole;
@@ -14,7 +16,9 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     protected $fillable = [
         'name',
@@ -34,8 +38,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'role'              => UserRole::class,
+            'password' => 'hashed',
+            'role' => UserRole::class,
         ];
     }
 
@@ -45,7 +49,8 @@ class User extends Authenticatable
             ->explode(' ')
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
+            ->implode('')
+        ;
     }
 
     public function isSuperAdmin(): bool
