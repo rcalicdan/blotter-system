@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Settings;
 
-use App\Concerns\ProfileValidationRules;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -15,29 +15,26 @@ use Livewire\Component;
 #[Title('Profile settings')]
 class Profile extends Component
 {
-    use ProfileValidationRules;
-
-    public string $name = '';
-
+    public string $first_name = '';
+    public string $last_name = '';
     public string $email = '';
 
-    /**
-     * Mount the component.
-     */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        $this->first_name = Auth::user()->first_name;
+        $this->last_name  = Auth::user()->last_name;
+        $this->email      = Auth::user()->email;
     }
 
-    /**
-     * Update the profile information for the currently authenticated user.
-     */
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
 
-        $validated = $this->validate($this->profileRules($user->id));
+        $validated = $this->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name'  => ['required', 'string', 'max:255'],
+            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ]);
 
         $user->fill($validated);
 
@@ -50,9 +47,6 @@ class Profile extends Component
         $this->dispatch('profile-updated', name: $user->name);
     }
 
-    /**
-     * Send an email verification notification to the current user.
-     */
     public function resendVerificationNotification(): void
     {
         $user = Auth::user();

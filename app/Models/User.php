@@ -21,7 +21,8 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'role',
@@ -43,14 +44,16 @@ class User extends Authenticatable
         ];
     }
 
+    public function getNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     public function initials(): string
     {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('')
-        ;
+        return Str::of($this->first_name)->substr(0, 1)->upper()
+            ->append(Str::of($this->last_name)->substr(0, 1)->upper())
+            ->toString();
     }
 
     public function isSuperAdmin(): bool
