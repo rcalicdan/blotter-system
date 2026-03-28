@@ -15,17 +15,17 @@
 <div class="w-full" {{ $attributes->only('x-data') }}>
     <div class="relative">
         @if ($icon)
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 z-10">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-zinc-500 z-10">
                 {!! $icon !!}
             </div>
         @endif
 
-        <input 
-            :type="typeof show !== 'undefined' ? (show ? 'text' : '{{ $type }}') : '{{ $type }}'" 
+        <input
+            :type="typeof show !== 'undefined' ? (show ? 'text' : '{{ $type }}') : '{{ $type }}'"
             @if ($name) name="{{ $name }}" @endif
             placeholder="{{ $placeholder }}"
             {{ $attributes->except(['x-data'])->merge([
-                'class' => "w-full py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-university-red/20 focus:border-university-red transition-all outline-none $paddingClass"
+                'class' => "w-full py-2.5 bg-gray-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-200 dark:placeholder-zinc-500 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all outline-none $paddingClass"
             ]) }}
             @if($fieldName) @class(['border-red-400 focus:border-red-500 focus:ring-red-100' => $errors->has($fieldName)]) @endif
         >
