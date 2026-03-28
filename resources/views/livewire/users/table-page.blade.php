@@ -98,11 +98,13 @@
                         {{-- Actions --}}
                         <x-table.cell class="text-center align-middle">
                             <div class="flex items-center justify-center gap-2">
-                                <x-ui.edit-button :href="route('users.edit', $user)" />
+                                @can('update', $user)
+                                    <x-ui.edit-button :href="route('users.edit', $user)" />
+                                @endcan
 
-                                @if ($user->id !== auth()->id())
+                                @can('delete', $user)
                                     <x-ui.delete-button :id="$user->id" :name="$user->name" resource="user" />
-                                @endif
+                                @endcan
                             </div>
                         </x-table.cell>
                     </x-table.row>

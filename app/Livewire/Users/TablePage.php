@@ -26,6 +26,11 @@ class TablePage extends Component
 
     protected array $sortableColumns = ['name', 'email', 'role', 'created_at'];
 
+    public function mount(): void
+    {
+        $this->authorize('view', User::class);
+    }
+
     public function updatedSearch(): void
     {
         $this->resetPage();

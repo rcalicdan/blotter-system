@@ -19,6 +19,11 @@ class CreatePage extends Component
     public string $password_confirmation = '';
     public string $role = '';
 
+    public function mount(): void
+    {
+       $this->authorize('create', User::class);
+    }
+
     protected function rules(): array
     {
         return [
