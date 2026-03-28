@@ -98,7 +98,7 @@
                         {{-- Actions --}}
                         <x-table.cell class="text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <x-ui.edit-button href="#" />
+                                <x-ui.edit-button :href="route('users.edit', $user)" />
 
                                 @if ($user->id !== auth()->id())
                                     <x-ui.delete-button :id="$user->id" :name="$user->name" resource="user" />

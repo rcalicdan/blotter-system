@@ -53,7 +53,8 @@ class User extends Authenticatable
     {
         return Str::of($this->first_name)->substr(0, 1)->upper()
             ->append(Str::of($this->last_name)->substr(0, 1)->upper())
-            ->toString();
+            ->toString()
+        ;
     }
 
     public function isSuperAdmin(): bool

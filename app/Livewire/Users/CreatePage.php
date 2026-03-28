@@ -12,7 +12,8 @@ use Livewire\Component;
 #[Title('Create User')]
 class CreatePage extends Component
 {
-    public string $name = '';
+    public string $first_name = '';
+    public string $last_name = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -21,7 +22,8 @@ class CreatePage extends Component
     protected function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'in:'.implode(',', array_column(UserRole::cases(), 'value'))],
@@ -32,15 +34,10 @@ class CreatePage extends Component
     {
         $validated = $this->validate();
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'role' => $validated['role'],
-        ]);
+        User::create($validated);
 
         session()->flash('notify', [
-            'message' => "User \"{$this->name}\" has been created.",
+            'message' => "User \"{$this->first_name} {$this->last_name}\" has been created.",
             'type' => 'success',
         ]);
 

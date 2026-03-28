@@ -22,8 +22,8 @@ class Profile extends Component
     public function mount(): void
     {
         $this->first_name = Auth::user()->first_name;
-        $this->last_name  = Auth::user()->last_name;
-        $this->email      = Auth::user()->email;
+        $this->last_name = Auth::user()->last_name;
+        $this->email = Auth::user()->email;
     }
 
     public function updateProfileInformation(): void
@@ -32,8 +32,8 @@ class Profile extends Component
 
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
-            'last_name'  => ['required', 'string', 'max:255'],
-            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
         ]);
 
         $user->fill($validated);
