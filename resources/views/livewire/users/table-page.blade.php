@@ -6,16 +6,16 @@
         </div>
         <x-ui.button href="#"
             icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>'>
-            Add User
+            <span class="hidden sm:inline">Add User</span>
         </x-ui.button>
     </div>
 
-    <x-table.index class="dark:bg-zinc-900 dark:border-zinc-700">
+    <x-table.index>
         {{-- Table Header / Filters --}}
         <x-table.header :searchable="true">
             <x-slot:filters>
                 <select wire:model.live="roleFilter"
-                    class="pl-3 pr-8 py-2.5 bg-gray-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-gray-300 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-university-red/20 focus:border-university-red transition-all">
+                    class="pl-3 pr-8 py-2.5 bg-gray-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-gray-300 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all">
                     <option value="">All Roles</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->value }}">{{ ucfirst($role->value) }}</option>
@@ -26,45 +26,62 @@
 
         {{-- Table --}}
         <table class="w-full">
-            <x-table.head class="dark:bg-zinc-800/50 dark:text-zinc-400">
+            <x-table.head>
                 <x-table.cell header sortable sortField="name">Name</x-table.cell>
-                <x-table.cell header sortable sortField="email">Email</x-table.cell>
-                <x-table.cell header sortable sortField="role">Role</x-table.cell>
-                <x-table.cell header sortable sortField="created_at">Joined</x-table.cell>
+                <x-table.cell header sortable sortField="email" class="hidden md:table-cell">Email</x-table.cell>
+                <x-table.cell header sortable sortField="role" class="hidden sm:table-cell">Role</x-table.cell>
+                <x-table.cell header sortable sortField="created_at" class="hidden lg:table-cell">Joined</x-table.cell>
                 <x-table.cell header class="text-right">Actions</x-table.cell>
             </x-table.head>
 
             <x-table.body>
                 @forelse ($users as $user)
-                    <x-table.row wire:key="user-{{ $user->id }}"
-                        class="dark:border-zinc-700 dark:hover:bg-zinc-800/50">
-                        {{-- Name --}}
+                    <x-table.row wire:key="user-{{ $user->id }}">
+                        {{-- Name (also shows email + role on mobile) --}}
                         <x-table.cell>
                             <div class="flex items-center gap-3">
                                 <x-ui.avatar :name="$user->name" />
-                                <div>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{ $user->name }}</p>
-                                    @if ($user->id === auth()->id())
-                                        <span
-                                            class="text-[10px] font-bold text-university-red uppercase tracking-wider">You</span>
-                                    @endif
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ $user->name }}</p>
+                                        @if ($user->id === auth()->id())
+                                            <span class="text-[10px] font-bold text-red-600 uppercase tracking-wider">You</span>
+                                        @endif
+                                    </div>
+                                    {{-- Shown only on mobile --}}
+                                    <p class="text-xs text-gray-500 dark:text-zinc-400 truncate mt-0.5 md:hidden">
+                                        {{ $user->email }}
+                                    </p>
+                                    <div class="mt-1 sm:hidden">
+                                        @php
+                                            $roleVariant = match ($user->role) {
+                                                \App\Enums\UserRole::SuperAdmin => 'danger',
+                                                \App\Enums\UserRole::Admin      => 'warning',
+                                                \App\Enums\UserRole::Staff      => 'info',
+                                                default                         => 'secondary',
+                                            };
+                                        @endphp
+                                        <x-ui.badge :variant="$roleVariant">
+                                            {{ $user->role ? ucfirst($user->role->value) : 'No Role' }}
+                                        </x-ui.badge>
+                                    </div>
                                 </div>
                             </div>
                         </x-table.cell>
 
-                        {{-- Email --}}
-                        <x-table.cell class="text-gray-500 dark:text-zinc-400">
+                        {{-- Email (hidden on mobile) --}}
+                        <x-table.cell class="hidden md:table-cell text-gray-500 dark:text-zinc-400">
                             {{ $user->email }}
                         </x-table.cell>
 
-                        {{-- Role --}}
-                        <x-table.cell>
+                        {{-- Role (hidden on mobile) --}}
+                        <x-table.cell class="hidden sm:table-cell">
                             @php
                                 $roleVariant = match ($user->role) {
                                     \App\Enums\UserRole::SuperAdmin => 'danger',
-                                    \App\Enums\UserRole::Admin => 'warning',
-                                    \App\Enums\UserRole::Staff => 'info',
-                                    default => 'secondary',
+                                    \App\Enums\UserRole::Admin      => 'warning',
+                                    \App\Enums\UserRole::Staff      => 'info',
+                                    default                         => 'secondary',
                                 };
                             @endphp
                             <x-ui.badge :variant="$roleVariant">
@@ -72,8 +89,8 @@
                             </x-ui.badge>
                         </x-table.cell>
 
-                        {{-- Joined --}}
-                        <x-table.cell class="text-gray-500 dark:text-zinc-400">
+                        {{-- Joined (hidden on mobile + tablet) --}}
+                        <x-table.cell class="hidden lg:table-cell text-gray-500 dark:text-zinc-400">
                             {{ $user->created_at->format('M d, Y') }}
                         </x-table.cell>
 

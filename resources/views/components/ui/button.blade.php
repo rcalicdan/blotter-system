@@ -11,9 +11,9 @@
     $baseClasses = 'inline-flex items-center justify-center font-semibold transition rounded-lg active:scale-95';
     
     $variants = [
-        'primary' => 'bg-university-red text-white hover:bg-red-700 shadow-sm',
-        'success' => 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100',
-        'danger' => 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100',
+        'primary'   => 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+        'success'   => 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100',
+        'danger'    => 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100',
         'secondary' => 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100',
     ];
     
@@ -39,9 +39,9 @@
                 {!! $icon !!}
             </span>
         @endif
-        
+
         {{ $slot }}
-        
+
         @if($icon && $iconPosition === 'right')
             <span class="{{ $iconSizes[$size] }} {{ $slot->isEmpty() ? '' : 'ml-2' }}">
                 {!! $icon !!}
@@ -55,9 +55,9 @@
                 {!! $icon !!}
             </span>
         @endif
-        
+
         {{ $slot }}
-        
+
         @if($icon && $iconPosition === 'right')
             <span class="{{ $iconSizes[$size] }} {{ $slot->isEmpty() ? '' : 'ml-2' }}">
                 {!! $icon !!}
