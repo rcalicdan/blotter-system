@@ -34,12 +34,10 @@
                                 Status</dt>
                             <dd class="mt-1">
                                 <x-ui.badge
-                                    variant="{{ match ($dispute->status) {
-                                        \App\Enums\DisputeStatus::Filed => 'info',
-                                        \App\Enums\DisputeStatus::Ongoing => 'warning',
-                                        \App\Enums\DisputeStatus::Settled => 'success',
-                                        \App\Enums\DisputeStatus::Dismissed => 'secondary',
-                                        \App\Enums\DisputeStatus::Escalated => 'danger',
+                                    variant="{{ match ($hearing->status) {
+                                        \App\Enums\HearingStatus::Scheduled => 'info',
+                                        \App\Enums\HearingStatus::Completed => 'success',
+                                        \App\Enums\HearingStatus::Cancelled => 'danger',
                                     } }}">
                                     {{ ucfirst($dispute->status->value) }}
                                 </x-ui.badge>

@@ -39,6 +39,11 @@
                 :current="request()->routeIs('disputes.*')" wire:navigate>
                 {{ __('Disputes') }}
             </flux:sidebar.item>
+
+            <flux:sidebar.item icon="calendar" :href="route('hearings.index')"
+                :current="request()->routeIs('hearings.*')" wire:navigate>
+                {{ __('Hearings') }}
+            </flux:sidebar.item>
         </flux:sidebar.nav>
 
         <flux:spacer />
