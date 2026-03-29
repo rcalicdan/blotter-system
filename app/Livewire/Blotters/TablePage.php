@@ -56,17 +56,20 @@ class TablePage extends Component
     {
         $entries = BlotterEntry::query()
             ->with(['recorder', 'parties.person'])
-            ->when($this->search, fn ($query) => $query
-                ->where('blotter_number', 'like', "%{$this->search}%")
-                ->orWhere('incident_location', 'like', "%{$this->search}%")
-                ->orWhere('narrative', 'like', "%{$this->search}%")
+            ->when(
+                $this->search,
+                fn ($query) => $query
+                    ->where('blotter_number', 'like', "%{$this->search}%")
+                    ->orWhere('incident_location', 'like', "%{$this->search}%")
+                    ->orWhere('narrative', 'like', "%{$this->search}%")
             )
             ->when($this->statusFilter, fn ($query) => $query->where('status', $this->statusFilter))
             ->tap(fn ($query) => $this->applySorting($query))
-            ->paginate(10);
+            ->paginate(10)
+        ;
 
         return view('livewire.blotters.table-page', [
-            'entries'  => $entries,
+            'entries' => $entries,
             'statuses' => BlotterStatus::cases(),
         ]);
     }

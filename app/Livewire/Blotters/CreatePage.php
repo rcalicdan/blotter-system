@@ -28,19 +28,18 @@ class CreatePage extends Component
     {
         $this->authorize('create', BlotterEntry::class);
 
-        $this->status         = BlotterStatus::Open->value;
-        $this->incident_date  = now()->format('Y-m-d');
+        $this->status = BlotterStatus::Open->value;
+        $this->incident_date = now()->format('Y-m-d');
         $this->blotter_number = $this->generateBlotterNumber();
 
         $this->parties = [
             ['person_id' => null, 'role' => BlotterPartyRole::Complainant->value],
-            ['person_id' => null, 'role' => BlotterPartyRole::Respondent->value],
         ];
     }
 
     private function generateBlotterNumber(): string
     {
-        $year  = now()->year;
+        $year = now()->year;
         $count = BlotterEntry::whereYear('created_at', $year)->count() + 1;
 
         return \sprintf('BLT-%d-%04d', $year, $count);
@@ -49,15 +48,15 @@ class CreatePage extends Component
     protected function rules(): array
     {
         return [
-            'blotter_number'    => ['required', 'string', 'max:255', 'unique:blotter_entries,blotter_number'],
-            'incident_date'     => ['required', 'date'],
-            'incident_time'     => ['nullable', 'date_format:H:i'],
+            'blotter_number' => ['required', 'string', 'max:255', 'unique:blotter_entries,blotter_number'],
+            'incident_date' => ['required', 'date'],
+            'incident_time' => ['nullable', 'date_format:H:i'],
             'incident_location' => ['required', 'string', 'max:500'],
-            'narrative'         => ['required', 'string'],
-            'status'            => ['required', 'string', 'in:'.implode(',', array_column(BlotterStatus::cases(), 'value'))],
-            'parties'           => ['required', 'array', 'min:1'],
+            'narrative' => ['required', 'string'],
+            'status' => ['required', 'string', 'in:' . implode(',', array_column(BlotterStatus::cases(), 'value'))],
+            'parties' => ['required', 'array', 'min:1'],
             'parties.*.person_id' => ['required', 'exists:people,id'],
-            'parties.*.role'      => ['required', 'string', 'in:'.implode(',', array_column(BlotterPartyRole::cases(), 'value'))],
+            'parties.*.role' => ['required', 'string', 'in:' . implode(',', array_column(BlotterPartyRole::cases(), 'value'))],
         ];
     }
 
@@ -65,8 +64,8 @@ class CreatePage extends Component
     {
         return [
             'parties.*.person_id.required' => 'Please select a person for each party.',
-            'parties.*.person_id.exists'   => 'The selected person does not exist.',
-            'parties.*.role.required'      => 'Please select a role for each party.',
+            'parties.*.person_id.exists' => 'The selected person does not exist.',
+            'parties.*.role.required' => 'Please select a role for each party.',
         ];
     }
 
@@ -77,7 +76,7 @@ class CreatePage extends Component
 
     public function removeParty(int $index): void
     {
-        if (\count($this->parties) <= 2) {
+        if (\count($this->parties) <= 1) {
             return;
         }
 
@@ -90,20 +89,20 @@ class CreatePage extends Component
 
         DB::transaction(function () use ($validated) {
             $entry = BlotterEntry::create([
-                'blotter_number'    => $validated['blotter_number'],
-                'incident_date'     => $validated['incident_date'],
-                'incident_time'     => $validated['incident_time'],
+                'blotter_number' => $validated['blotter_number'],
+                'incident_date' => $validated['incident_date'],
+                'incident_time' => $validated['incident_time'],
                 'incident_location' => $validated['incident_location'],
-                'narrative'         => $validated['narrative'],
-                'status'            => $validated['status'],
-                'recorded_by'       => auth()->id(),
+                'narrative' => $validated['narrative'],
+                'status' => $validated['status'],
+                'recorded_by' => auth()->id(),
             ]);
 
             foreach ($validated['parties'] as $party) {
                 BlotterParty::create([
                     'blotter_id' => $entry->id,
-                    'person_id'  => $party['person_id'],
-                    'role'       => $party['role'],
+                    'person_id' => $party['person_id'],
+                    'role' => $party['role'],
                 ]);
             }
         });
@@ -116,7 +115,7 @@ class CreatePage extends Component
     public function render()
     {
         return view('livewire.blotters.create-page', [
-            'statuses'   => BlotterStatus::cases(),
+            'statuses' => BlotterStatus::cases(),
             'partyRoles' => BlotterPartyRole::cases(),
         ]);
     }

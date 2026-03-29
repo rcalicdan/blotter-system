@@ -43,17 +43,17 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(
-            fn(): ?Password => app()->isProduction()
+            fn (): ?Password => app()->isProduction()
                 ? Password::min(12)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
                 : null,
         );
 
-        $this->app->bind(PhotoUploadService::class, fn() => new PhotoUploadService(
+        $this->app->bind(PhotoUploadService::class, fn () => new PhotoUploadService(
             directory: 'photos',
             disk: 'public',
         ));

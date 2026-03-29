@@ -29,32 +29,32 @@ class UpdatePage extends Component
     {
         $this->authorize('update', $blotterEntry);
 
-        $this->blotterEntry     = $blotterEntry;
-        $this->blotter_number   = $blotterEntry->blotter_number;
-        $this->incident_date    = $blotterEntry->incident_date->format('Y-m-d');
-        $this->incident_time    = $blotterEntry->incident_time ?? '';
+        $this->blotterEntry = $blotterEntry;
+        $this->blotter_number = $blotterEntry->blotter_number;
+        $this->incident_date = $blotterEntry->incident_date->format('Y-m-d');
+        $this->incident_time = $blotterEntry->incident_time ?? '';
         $this->incident_location = $blotterEntry->incident_location;
-        $this->narrative        = $blotterEntry->narrative;
-        $this->status           = $blotterEntry->status->value;
+        $this->narrative = $blotterEntry->narrative;
+        $this->status = $blotterEntry->status->value;
 
-        $this->parties = $blotterEntry->parties->map(fn ($party) => [
+        $this->parties = $blotterEntry->parties->map(fn($party) => [
             'person_id' => $party->person_id,
-            'role'      => $party->role->value,
+            'role' => $party->role->value,
         ])->toArray();
     }
 
     protected function rules(): array
     {
         return [
-            'blotter_number'    => ['required', 'string', 'max:255', "unique:blotter_entries,blotter_number,{$this->blotterEntry->id}"],
-            'incident_date'     => ['required', 'date'],
-            'incident_time'     => ['nullable', 'date_format:H:i'],
+            'blotter_number' => ['required', 'string', 'max:255', "unique:blotter_entries,blotter_number,{$this->blotterEntry->id}"],
+            'incident_date' => ['required', 'date'],
+            'incident_time' => ['nullable', 'date_format:H:i'],
             'incident_location' => ['required', 'string', 'max:500'],
-            'narrative'         => ['required', 'string'],
-            'status'            => ['required', 'string', 'in:'.implode(',', array_column(BlotterStatus::cases(), 'value'))],
-            'parties'           => ['required', 'array', 'min:1'],
+            'narrative' => ['required', 'string'],
+            'status' => ['required', 'string', 'in:' . implode(',', array_column(BlotterStatus::cases(), 'value'))],
+            'parties' => ['required', 'array', 'min:1'],
             'parties.*.person_id' => ['required', 'exists:people,id'],
-            'parties.*.role'      => ['required', 'string', 'in:'.implode(',', array_column(BlotterPartyRole::cases(), 'value'))],
+            'parties.*.role' => ['required', 'string', 'in:' . implode(',', array_column(BlotterPartyRole::cases(), 'value'))],
         ];
     }
 
@@ -62,8 +62,8 @@ class UpdatePage extends Component
     {
         return [
             'parties.*.person_id.required' => 'Please select a person for each party.',
-            'parties.*.person_id.exists'   => 'The selected person does not exist.',
-            'parties.*.role.required'      => 'Please select a role for each party.',
+            'parties.*.person_id.exists' => 'The selected person does not exist.',
+            'parties.*.role.required' => 'Please select a role for each party.',
         ];
     }
 
@@ -74,7 +74,7 @@ class UpdatePage extends Component
 
     public function removeParty(int $index): void
     {
-        if (\count($this->parties) <= 2) {
+        if (\count($this->parties) <= 1) {
             return;
         }
 
@@ -87,12 +87,12 @@ class UpdatePage extends Component
 
         DB::transaction(function () use ($validated) {
             $this->blotterEntry->update([
-                'blotter_number'    => $validated['blotter_number'],
-                'incident_date'     => $validated['incident_date'],
-                'incident_time'     => $validated['incident_time'],
+                'blotter_number' => $validated['blotter_number'],
+                'incident_date' => $validated['incident_date'],
+                'incident_time' => $validated['incident_time'],
                 'incident_location' => $validated['incident_location'],
-                'narrative'         => $validated['narrative'],
-                'status'            => $validated['status'],
+                'narrative' => $validated['narrative'],
+                'status' => $validated['status'],
             ]);
 
             $this->blotterEntry->parties()->delete();
@@ -100,8 +100,8 @@ class UpdatePage extends Component
             foreach ($validated['parties'] as $party) {
                 BlotterParty::create([
                     'blotter_id' => $this->blotterEntry->id,
-                    'person_id'  => $party['person_id'],
-                    'role'       => $party['role'],
+                    'person_id' => $party['person_id'],
+                    'role' => $party['role'],
                 ]);
             }
         });
@@ -114,7 +114,7 @@ class UpdatePage extends Component
     public function render()
     {
         return view('livewire.blotters.update-page', [
-            'statuses'   => BlotterStatus::cases(),
+            'statuses' => BlotterStatus::cases(),
             'partyRoles' => BlotterPartyRole::cases(),
         ]);
     }
