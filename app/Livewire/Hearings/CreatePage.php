@@ -11,12 +11,15 @@ use App\Models\HearingAttendee;
 use App\Services\RedirectNotification;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 #[Title('Schedule Hearing')]
 class CreatePage extends Component
 {
+    #[Url] 
     public ?int $dispute_id = null;
+
     public string $scheduled_date = '';
     public string $scheduled_time = '';
     public string $location = '';
@@ -31,22 +34,10 @@ class CreatePage extends Component
 
         $this->status         = HearingStatus::Scheduled->value;
         $this->scheduled_date = now()->format('Y-m-d');
-    }
 
-    protected function rules(): array
-    {
-        return [
-            'dispute_id'            => ['required', 'exists:disputes,id'],
-            'scheduled_date'        => ['required', 'date'],
-            'scheduled_time'        => ['nullable', 'date_format:H:i'],
-            'location'              => ['required', 'string', 'max:500'],
-            'status'                => ['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
-            'notes'                 => ['nullable', 'string'],
-            'conducted_by'          => ['nullable', 'exists:users,id'],
-            'attendees'             => ['nullable', 'array'],
-            'attendees.*.person_id' => ['required', 'exists:people,id'],
-            'attendees.*.attended'  => ['boolean'],
-        ];
+        if ($this->dispute_id) {
+            $this->loadAttendeesFromDispute();
+        }
     }
 
     public function updatedDisputeId(): void
@@ -68,13 +59,28 @@ class CreatePage extends Component
             return;
         }
 
-        // Pre-populate attendees from dispute parties
         $this->attendees = $dispute->parties->map(fn ($party) => [
             'person_id' => $party->person_id,
             'name'      => $party->person->full_name,
             'role'      => $party->role->value,
             'attended'  => false,
         ])->toArray();
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'dispute_id'            => ['required', 'exists:disputes,id'],
+            'scheduled_date'        => ['required', 'date'],
+            'scheduled_time'        => ['nullable', 'date_format:H:i'],
+            'location'              => ['required', 'string', 'max:500'],
+            'status'                => ['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
+            'notes'                 => ['nullable', 'string'],
+            'conducted_by'          => ['nullable', 'exists:users,id'],
+            'attendees'             => ['nullable', 'array'],
+            'attendees.*.person_id' => ['required', 'exists:people,id'],
+            'attendees.*.attended'  => ['boolean'],
+        ];
     }
 
     public function save(): void

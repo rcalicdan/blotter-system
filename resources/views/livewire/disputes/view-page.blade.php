@@ -62,13 +62,14 @@
                             class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 flex-shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
                         <div>
                             <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Assigned Officer</p>
                             <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                                {{ $dispute->assignee?->name ?? 'Unassigned' }}</p>
+                                {{ $dispute->assignee?->name ?? 'Unassigned' }}
+                            </p>
                         </div>
                     </div>
                     <div class="flex items-center gap-4 md:pl-6 pt-4 md:pt-0">
@@ -82,7 +83,7 @@
                         <div>
                             <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Linked Blotter</p>
                             @if ($dispute->blotterEntry)
-                                <a href="{{ route('blotter.view', $dispute->blotterEntry) }}"
+                                <a href="{{ route('blotters.view', $dispute->blotterEntry) }}"
                                     class="text-sm font-bold text-red-600 hover:underline">
                                     {{ $dispute->blotterEntry->blotter_number }}
                                 </a>
@@ -102,7 +103,8 @@
                         <div class="min-w-0">
                             <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Case Subject</p>
                             <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                                {{ $dispute->subject }}</p>
+                                {{ $dispute->subject }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -120,6 +122,19 @@
 
             {{-- Hearings Section --}}
             <x-form.card title="Hearing Schedule">
+                {{-- Header with inline action button --}}
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm text-gray-500 dark:text-zinc-400">
+                        {{ $dispute->hearings->count() }} hearing(s) on record
+                    </p>
+                    @can('create', \App\Models\Hearing::class)
+                        <x-ui.button href="{{ route('hearings.create', ['dispute_id' => $dispute->id]) }}" size="sm"
+                            icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>'>
+                            Schedule Hearing
+                        </x-ui.button>
+                    @endcan
+                </div>
+
                 @if ($dispute->hearings->isNotEmpty())
                     <div class="space-y-4">
                         @foreach ($dispute->hearings as $hearing)
@@ -132,9 +147,8 @@
                                             $hearing->status === \App\Enums\HearingStatus::Scheduled,
                                         'bg-green-50 text-green-600 border border-green-100' =>
                                             $hearing->status === \App\Enums\HearingStatus::Completed,
-                                        'bg-gray-50 text-gray-400 border border-gray-100' => in_array(
-                                            $hearing->status,
-                                            [\App\Enums\HearingStatus::Cancelled]),
+                                        'bg-red-50 text-red-400 border border-red-100' =>
+                                            $hearing->status === \App\Enums\HearingStatus::Cancelled,
                                     ])>
                                         <span>{{ $hearing->scheduled_date->format('M') }}</span>
                                         <span
@@ -164,8 +178,10 @@
                                         } }}">
                                         {{ ucfirst($hearing->status->value) }}
                                     </x-ui.badge>
-                                    <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium">By
-                                        {{ $hearing->conductor?->name ?? 'TBA' }}</p>
+                                    <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium">
+                                        By {{ $hearing->conductor?->name ?? 'TBA' }}
+                                    </p>
+                                    <x-ui.view-button :href="route('hearings.view', $hearing)" size="xs" />
                                 </div>
                             </div>
                         @endforeach
@@ -173,12 +189,12 @@
                 @else
                     <div
                         class="text-center py-8 bg-gray-50/50 dark:bg-zinc-800/30 rounded-xl border border-dashed border-gray-200 dark:border-zinc-700">
-                        <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-gray-300 dark:text-zinc-600 mx-auto mb-2" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <p class="text-sm text-gray-400">No hearings scheduled yet.</p>
+                        <p class="text-sm text-gray-400 dark:text-zinc-500">No hearings scheduled yet.</p>
                     </div>
                 @endif
             </x-form.card>
@@ -225,7 +241,7 @@
                 </div>
             </x-form.card>
 
-            {{-- Case Resolution Section --}}
+            {{-- Case Resolution --}}
             @if ($dispute->resolution)
                 <div
                     class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl p-5 text-white shadow-lg shadow-emerald-600/20">
@@ -250,14 +266,16 @@
                         <div>
                             <p class="text-[10px] uppercase font-bold text-emerald-100 tracking-wider">Resolved On</p>
                             <p class="text-xs font-medium">
-                                {{ $dispute->resolution->resolved_at->format('M d, Y h:i A') }}</p>
+                                {{ $dispute->resolution->resolved_at->format('M d, Y h:i A') }}
+                            </p>
                         </div>
                         @if ($dispute->resolution->details)
                             <div class="pt-2 border-t border-white/10">
                                 <p class="text-[10px] uppercase font-bold text-emerald-100 tracking-wider mb-1">Final
                                     Details</p>
                                 <p class="text-xs leading-relaxed italic opacity-90">
-                                    {{ $dispute->resolution->details }}</p>
+                                    {{ $dispute->resolution->details }}
+                                </p>
                             </div>
                         @endif
                     </div>
