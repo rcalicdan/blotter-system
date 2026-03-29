@@ -39,8 +39,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'role'              => UserRole::class,
+            'password' => 'hashed',
+            'role' => UserRole::class,
         ];
     }
 
@@ -53,7 +53,8 @@ class User extends Authenticatable
     {
         return Str::of($this->first_name)->substr(0, 1)->upper()
             ->append(Str::of($this->last_name)->substr(0, 1)->upper())
-            ->toString();
+            ->toString()
+        ;
     }
 
     public function isSuperAdmin(): bool

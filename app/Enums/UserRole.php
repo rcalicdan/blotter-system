@@ -19,7 +19,7 @@ enum UserRole: string
     {
         return match ($this) {
             self::SuperAdmin, self::Admin => true,
-            default                       => false,
+            default => false,
         };
     }
 
@@ -27,7 +27,7 @@ enum UserRole: string
     {
         return match ($this) {
             self::SuperAdmin, self::Admin => true,
-            default                       => false,
+            default => false,
         };
     }
 
@@ -35,8 +35,8 @@ enum UserRole: string
     {
         return match ($this) {
             self::SuperAdmin => true,
-            self::Admin      => $targetRole === self::Staff,
-            default          => false,
+            self::Admin => $targetRole === self::Staff,
+            default => false,
         };
     }
 
@@ -44,8 +44,8 @@ enum UserRole: string
     {
         return match ($this) {
             self::SuperAdmin => true,
-            self::Admin      => $targetRole === self::Staff,
-            default          => false,
+            self::Admin => $targetRole === self::Staff,
+            default => false,
         };
     }
 }

@@ -21,7 +21,7 @@ class CreatePage extends Component
 
     public function mount(): void
     {
-       $this->authorize('create', User::class);
+        $this->authorize('create', User::class);
     }
 
     protected function rules(): array
