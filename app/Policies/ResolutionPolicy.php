@@ -23,4 +23,9 @@ class ResolutionPolicy
     {
         return $authUser->role->canModify();
     }
+
+    public function delete(User $authUser, Resolution $resolution): bool
+    {
+        return $authUser->role->canModify();
+    }
 }

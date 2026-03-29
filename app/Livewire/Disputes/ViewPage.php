@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Disputes;
 
 use App\Models\Dispute;
+use App\Services\RedirectNotification;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -25,6 +26,24 @@ class ViewPage extends Component
             'hearings.conductor',
             'resolution',
         ]);
+    }
+
+    public function deleteResolution(): void
+    {
+        $this->authorize('delete', $this->dispute->resolution);
+
+        $this->dispute->resolution->delete();
+
+        $this->dispute = $this->dispute->fresh([
+            'filer',
+            'assignee',
+            'parties.person',
+            'blotterEntry',
+            'hearings.conductor',
+            'resolution',
+        ]);
+
+        $this->dispatch('notify', message: 'Resolution has been deleted.', type: 'success');
     }
 
     public function render()
