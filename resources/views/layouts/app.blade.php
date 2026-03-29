@@ -2,5 +2,6 @@
     <flux:main>
         {{ $slot }}
         <x-ui.toast />
+        <x-ui.confirmation-modal />
     </flux:main>
 </x-layouts::app.sidebar>
