@@ -6,6 +6,7 @@ namespace App\Livewire\Users;
 
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Services\RedirectNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -61,18 +62,19 @@ class UpdatePage extends Component
 
         $this->user->save();
 
-        session()->flash('notify', [
-            'message' => "User \"{$this->user->name}\" has been updated.",
-            'type' => 'success',
-        ]);
+        RedirectNotification::success("User \"{$this->user->name}\" has been updated.");
 
         $this->redirect(route('users.index'), navigate: true);
     }
 
     public function render()
     {
+        $roles = auth()->user()->isAdmin()
+            ? collect(UserRole::cases())->filter(fn ($role) => $role === UserRole::Staff)
+            : collect(UserRole::cases());
+
         return view('livewire.users.update-page', [
-            'roles' => UserRole::cases(),
+            'roles' => $roles,
         ]);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Services\PhotoUploadService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -41,13 +42,18 @@ class AppServiceProvider extends ServiceProvider
 
         Password::defaults(
             fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()
-            : null,
+                ? Password::min(12)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+                : null,
         );
+
+        $this->app->bind(PhotoUploadService::class, fn () => new PhotoUploadService(
+            directory: 'photos',
+            disk: 'public',
+        ));
     }
 }

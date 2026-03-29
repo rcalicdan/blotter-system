@@ -6,6 +6,7 @@ namespace App\Livewire\Users;
 
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Services\RedirectNotification;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -41,18 +42,19 @@ class CreatePage extends Component
 
         User::create($validated);
 
-        session()->flash('notify', [
-            'message' => "User \"{$this->first_name} {$this->last_name}\" has been created.",
-            'type' => 'success',
-        ]);
+        RedirectNotification::success("User \"{$this->first_name} {$this->last_name}\" has been created.");
 
         $this->redirect(route('users.index'), navigate: true);
     }
 
     public function render()
     {
+        $roles = auth()->user()->isAdmin()
+            ? collect(UserRole::cases())->filter(fn ($role) => $role === UserRole::Staff)
+            : collect(UserRole::cases());
+
         return view('livewire.users.create-page', [
-            'roles' => UserRole::cases(),
+            'roles' => $roles,
         ]);
     }
 }

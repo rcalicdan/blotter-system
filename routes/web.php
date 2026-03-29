@@ -14,6 +14,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', App\Livewire\Users\CreatePage::class)->name('create');
         Route::get('/{user}/edit', App\Livewire\Users\UpdatePage::class)->name('edit');
     });
+
+    Route::prefix('people')->name('people.')->group(function () {
+        Route::get('/', App\Livewire\People\TablePage::class)->name('index');
+        Route::get('/create', App\Livewire\People\CreatePage::class)->name('create');
+        Route::get('/{person}/edit', App\Livewire\People\UpdatePage::class)->name('edit');
+    });
 });
 
 require __DIR__.'/settings.php';

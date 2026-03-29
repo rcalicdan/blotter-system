@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('hearing_attendees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hearing_id')->constrained('hearings')->cascadeOnDelete();
-            $table->foreignId('person_id')->constrained('persons');
+            $table->foreignId('person_id')->constrained('people');
             $table->boolean('attended')->default(false);
 
             $table->index('hearing_id');

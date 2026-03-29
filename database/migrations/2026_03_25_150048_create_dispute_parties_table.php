@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dispute_parties', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dispute_id')->constrained('disputes')->cascadeOnDelete();
-            $table->foreignId('person_id')->constrained('persons');
+            $table->foreignId('person_id')->constrained('people');
             $table->enum('role', array_column(DisputePartyRole::cases(), 'value'));
 
             $table->index('dispute_id');

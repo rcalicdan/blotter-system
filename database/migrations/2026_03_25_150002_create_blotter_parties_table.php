@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('blotter_parties', function (Blueprint $table) {
             $table->id();
             $table->foreignId('blotter_id')->constrained('blotter_entries')->cascadeOnDelete();
-            $table->foreignId('person_id')->constrained('persons');
+            $table->foreignId('person_id')->constrained('people');
             $table->enum('role', array_column(BlotterPartyRole::cases(), 'value'));
 
             $table->index('blotter_id');

@@ -24,6 +24,11 @@
                 wire:navigate>
                 {{ __('Users') }}
             </flux:sidebar.item>
+
+            <flux:sidebar.item icon="users" :href="route('people.index')" :current="request()->routeIs('people.*')"
+                wire:navigate>
+                {{ __('People') }}
+            </flux:sidebar.item>
         </flux:sidebar.nav>
 
         <flux:spacer />
