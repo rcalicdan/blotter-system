@@ -36,12 +36,12 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        {{-- Header Actions --}}
+        <div class="flex items-center gap-2 flex-shrink-0">
             <x-ui.button href="{{ route('disputes.index') }}" variant="secondary"
                 icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>'>
                 <span>Back</span>
             </x-ui.button>
-
             @can('update', $dispute)
                 <x-ui.edit-button :href="route('disputes.edit', $dispute)" size="md" />
             @endcan
@@ -122,7 +122,6 @@
 
             {{-- Hearings Section --}}
             <x-form.card title="Hearing Schedule">
-                {{-- Header with inline action button --}}
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-sm text-gray-500 dark:text-zinc-400">
                         {{ $dispute->hearings->count() }} hearing(s) on record
@@ -215,7 +214,6 @@
                                 @else
                                     <x-ui.avatar :name="$party->person->full_name" class="h-11 w-11 rounded-xl" />
                                 @endif
-
                                 <div @class([
                                     'absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px]',
                                     'bg-blue-500 text-white' =>
@@ -241,12 +239,13 @@
                 </div>
             </x-form.card>
 
-            {{-- Case Resolution --}}
+            {{-- Resolution Card --}}
             @if ($dispute->resolution)
+                {{-- Resolved state: rich emerald card --}}
                 <div
                     class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl p-5 text-white shadow-lg shadow-emerald-600/20">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                        <div class="p-2 bg-white/20 rounded-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -265,12 +264,12 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase font-bold text-emerald-100 tracking-wider">Resolved On</p>
-                            <p class="text-xs font-medium">
+                            <p class="text-xs font-medium mt-1">
                                 {{ $dispute->resolution->resolved_at->format('M d, Y h:i A') }}
                             </p>
                         </div>
                         @if ($dispute->resolution->details)
-                            <div class="pt-2 border-t border-white/10">
+                            <div class="pt-3 border-t border-white/10">
                                 <p class="text-[10px] uppercase font-bold text-emerald-100 tracking-wider mb-1">Final
                                     Details</p>
                                 <p class="text-xs leading-relaxed italic opacity-90">
@@ -279,6 +278,29 @@
                             </div>
                         @endif
                     </div>
+                </div>
+            @else
+                <div
+                    class="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-dashed border-gray-200 dark:border-zinc-700">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="p-2 bg-gray-100 dark:bg-zinc-800 rounded-lg">
+                            <svg class="w-5 h-5 text-gray-400 dark:text-zinc-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-sm text-gray-700 dark:text-zinc-300">Case Resolution</h4>
+                    </div>
+                    <p class="text-xs text-gray-400 dark:text-zinc-500 mb-4 leading-relaxed">
+                        This dispute has not been resolved yet. Once a resolution is reached, you can record it here.
+                    </p>
+                    @can('create', \App\Models\Resolution::class)
+                        <x-ui.button :href="route('disputes.resolution.create', $dispute)" class="w-full justify-center"
+                            icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'>
+                            Record Resolution
+                        </x-ui.button>
+                    @endcan
                 </div>
             @endif
         </div>

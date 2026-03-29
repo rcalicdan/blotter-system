@@ -33,6 +33,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create', App\Livewire\Disputes\CreatePage::class)->name('create');
         Route::get('/{dispute}/edit', App\Livewire\Disputes\UpdatePage::class)->name('edit');
         Route::get('/{dispute}', App\Livewire\Disputes\ViewPage::class)->name('view');
+
+        Route::get('/{dispute}/resolution', App\Livewire\Resolutions\ViewPage::class)->name('resolution.view');
+        Route::get('/{dispute}/resolution/create', App\Livewire\Resolutions\CreatePage::class)->name('resolution.create');
+        Route::get('/{dispute}/resolution/edit', App\Livewire\Resolutions\UpdatePage::class)->name('resolution.edit');
     });
 
     Route::prefix('hearings')->name('hearings.')->group(function () {
