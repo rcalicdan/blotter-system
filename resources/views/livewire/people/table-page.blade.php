@@ -18,8 +18,7 @@
         <table class="w-full">
             <x-table.head>
                 <x-table.cell header sortable sortField="first_name">Name</x-table.cell>
-                <x-table.cell header class="hidden md:table-cell">Contact</x-table.cell>
-                <x-table.cell header class="hidden lg:table-cell">Address</x-table.cell>
+                <x-table.cell header class="hidden md:table-cell text-center">Contact</x-table.cell>
                 <x-table.cell header sortable sortField="created_at" class="hidden lg:table-cell">Added</x-table.cell>
                 <x-table.cell header class="text-center">Actions</x-table.cell>
             </x-table.head>
@@ -27,8 +26,7 @@
             <x-table.body>
                 @forelse ($people as $person)
                     <x-table.row wire:key="person-{{ $person->id }}">
-                        {{-- Name --}}
-                        <x-table.cell>
+                        <x-table.cell class="align-middle">
                             <div class="flex items-center gap-3">
                                 {{-- Photo or Initials --}}
                                 @if ($person->photo_url)
@@ -52,22 +50,14 @@
                             </div>
                         </x-table.cell>
 
-                        {{-- Contact --}}
-                        <x-table.cell class="hidden md:table-cell text-gray-500 dark:text-zinc-400">
+                        <x-table.cell class="hidden md:table-cell text-center align-middle text-gray-500 dark:text-zinc-400">
                             {{ $person->contact_number ?? '—' }}
                         </x-table.cell>
 
-                        {{-- Address --}}
-                        <x-table.cell class="hidden lg:table-cell text-gray-500 dark:text-zinc-400 max-w-xs truncate">
-                            {{ $person->address ?? '—' }}
-                        </x-table.cell>
-
-                        {{-- Added --}}
-                        <x-table.cell class="hidden lg:table-cell text-gray-500 dark:text-zinc-400">
+                        <x-table.cell class="hidden lg:table-cell align-middle text-gray-500 dark:text-zinc-400">
                             {{ $person->created_at->format('M d, Y') }}
                         </x-table.cell>
 
-                        {{-- Actions --}}
                         <x-table.cell class="text-center align-middle">
                             <div class="flex items-center justify-center gap-2">
                                 @can('update', $person)

@@ -44,7 +44,7 @@ class UpdatePage extends Component
             'last_name' => ['required', 'string', 'max:255'],
             'birthdate' => ['nullable', 'date'],
             'address' => ['nullable', 'string', 'max:500'],
-            'contact_number' => ['nullable', 'string', 'max:20'],
+            'contact_number' => ['nullable', 'string', 'regex:/^(\+639|09)\d{9}$/'],
             'photo' => ['nullable', 'image', 'max:2048'],
         ];
     }
