@@ -2,7 +2,7 @@
     {{-- Dispute --}}
     <div class="sm:col-span-2">
         <x-form.label :required="true">Dispute</x-form.label>
-        <livewire:forms.searchable-dropdown wire:model.live="dispute_id" :model="\App\Models\Dispute::class" :searchFields="['case_number', 'subject']"
+        <livewire:form.searchable-dropdown wire:model.live="dispute_id" :model="\App\Models\Dispute::class" :searchFields="['case_number', 'subject']"
             displayField="case_number" :subLabelFields="['subject']" placeholder="Search dispute by case number..."
             key="dispute-dropdown" />
         @error('dispute_id')
@@ -41,7 +41,7 @@
     {{-- Conducted By --}}
     <div>
         <x-form.label>Conducted By</x-form.label>
-        <livewire:forms.searchable-dropdown wire:model="conducted_by" :model="\App\Models\User::class" :searchFields="['first_name', 'last_name', 'email']"
+        <livewire:form.searchable-dropdown wire:model="conducted_by" :model="\App\Models\User::class" :searchFields="['first_name', 'last_name', 'email']"
             displayField="name" :subLabelFields="['email']" placeholder="Search officer..." key="conductor-dropdown" />
         @error('conducted_by')
             <p class="text-red-500 text-xs mt-1.5 font-medium">{{ $message }}</p>

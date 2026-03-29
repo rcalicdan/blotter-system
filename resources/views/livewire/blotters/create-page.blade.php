@@ -17,7 +17,11 @@
                 {{-- Blotter Number --}}
                 <div>
                     <x-form.label for="blotter_number" :required="true">Blotter Number</x-form.label>
-                    <x-form.input id="blotter_number" wire:model="blotter_number" placeholder="e.g. BLT-2026-0001" />
+                    <x-form.input id="blotter_number" wire:model="blotter_number" placeholder="e.g. BLT-2026-0001"
+                        readonly class="bg-gray-100 dark:bg-zinc-700 cursor-not-allowed" />
+                    @error('blotter_number')
+                        <p class="text-red-500 text-xs mt-1.5 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Status --}}
@@ -45,13 +49,15 @@
                 {{-- Location --}}
                 <div class="sm:col-span-2">
                     <x-form.label for="incident_location" :required="true">Incident Location</x-form.label>
-                    <x-form.input id="incident_location" wire:model="incident_location" placeholder="Enter incident location" />
+                    <x-form.input id="incident_location" wire:model="incident_location"
+                        placeholder="Enter incident location" />
                 </div>
 
                 {{-- Narrative --}}
                 <div class="sm:col-span-2">
                     <x-form.label for="narrative" :required="true">Narrative</x-form.label>
-                    <x-form.text-area id="narrative" wire:model="narrative" placeholder="Describe the incident in detail..." :rows="5" />
+                    <x-form.text-area id="narrative" wire:model="narrative"
+                        placeholder="Describe the incident in detail..." :rows="5" />
                 </div>
             </x-form.grid>
 

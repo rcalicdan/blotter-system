@@ -6,7 +6,7 @@
                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <x-form.label :required="true">Person</x-form.label>
-                        <livewire:forms.searchable-dropdown wire:model="parties.{{ $index }}.person_id"
+                        <livewire:form.searchable-dropdown wire:model="parties.{{ $index }}.person_id"
                             :model="\App\Models\Person::class" :searchFields="['first_name', 'last_name']" displayField="full_name" :subLabelFields="['address', 'birthdate']"
                             :subLabelFieldFormats="['birthdate' => 'F j, Y']" subLabelSeparator=" · " placeholder="Search person..." :key="'party-person-' . $index" />
                         @error("parties.{$index}.person_id")
