@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('dashboard'))->name('home');
+Route::get('/', fn() => redirect()->route('dashboard'))->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -27,6 +27,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{blotterEntry}/edit', App\Livewire\Blotters\UpdatePage::class)->name('edit');
         Route::get('/{blotterEntry}', App\Livewire\Blotters\ViewPage::class)->name('view');
     });
+
+    Route::prefix('disputes')->name('disputes.')->group(function () {
+        Route::get('/', App\Livewire\Disputes\TablePage::class)->name('index');
+        Route::get('/create', App\Livewire\Disputes\CreatePage::class)->name('create');
+        Route::get('/{dispute}/edit', App\Livewire\Disputes\UpdatePage::class)->name('edit');
+        Route::get('/{dispute}', App\Livewire\Disputes\ViewPage::class)->name('view');
+    });
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

@@ -34,6 +34,11 @@
                 :current="request()->routeIs('blotters.*')" wire:navigate>
                 {{ __('Blotter') }}
             </flux:sidebar.item>
+
+            <flux:sidebar.item icon="scale" :href="route('disputes.index')"
+                :current="request()->routeIs('disputes.*')" wire:navigate>
+                {{ __('Disputes') }}
+            </flux:sidebar.item>
         </flux:sidebar.nav>
 
         <flux:spacer />
