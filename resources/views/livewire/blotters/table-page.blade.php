@@ -5,7 +5,7 @@
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage incident blotter records.</p>
         </div>
         @can('create', \App\Models\BlotterEntry::class)
-            <x-ui.button href="{{ route('blotter.create') }}"
+            <x-ui.button href="{{ route('blotters.create') }}"
                 icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>'>
                 <span class="hidden sm:inline">New Entry</span>
             </x-ui.button>
@@ -92,10 +92,10 @@
                         {{-- Actions --}}
                         <x-table.cell class="text-center align-middle">
                             <div class="flex items-center justify-center gap-2">
-                                <x-ui.view-button :href="route('blotter.view', $entry)" />
+                                <x-ui.view-button :href="route('blotters.view', $entry)" />
 
                                 @can('update', $entry)
-                                    <x-ui.edit-button :href="route('blotter.edit', $entry)" />
+                                    <x-ui.edit-button :href="route('blotters.edit', $entry)" />
                                 @endcan
 
                                 @can('delete', $entry)

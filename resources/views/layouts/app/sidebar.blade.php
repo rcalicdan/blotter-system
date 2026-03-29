@@ -30,8 +30,8 @@
                 {{ __('People') }}
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="document-text" :href="route('blotter.index')"
-                :current="request()->routeIs('blotter.*')" wire:navigate>
+            <flux:sidebar.item icon="document-text" :href="route('blotters.index')"
+                :current="request()->routeIs('blotters.*')" wire:navigate>
                 {{ __('Blotter') }}
             </flux:sidebar.item>
         </flux:sidebar.nav>

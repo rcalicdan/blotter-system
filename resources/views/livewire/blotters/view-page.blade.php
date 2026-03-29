@@ -6,9 +6,9 @@
         </div>
         <div class="flex items-center gap-2">
             @can('update', $blotterEntry)
-                <x-ui.edit-button :href="route('blotter.edit', $blotterEntry)" size="md" />
+                <x-ui.edit-button :href="route('blotters.edit', $blotterEntry)" size="md" />
             @endcan
-            <x-ui.button href="{{ route('blotter.index') }}" variant="secondary"
+            <x-ui.button href="{{ route('blotters.index') }}" variant="secondary"
                 icon='<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>'>
                 <span class="hidden sm:inline">Back</span>
             </x-ui.button>
