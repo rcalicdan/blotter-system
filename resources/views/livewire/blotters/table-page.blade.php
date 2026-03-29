@@ -29,8 +29,6 @@
             <x-table.head>
                 <x-table.cell header sortable sortField="blotter_number">Blotter #</x-table.cell>
                 <x-table.cell header sortable sortField="incident_date" class="hidden md:table-cell">Incident Date</x-table.cell>
-                <x-table.cell header class="hidden md:table-cell">Location</x-table.cell>
-                <x-table.cell header class="hidden lg:table-cell">Parties</x-table.cell>
                 <x-table.cell header sortable sortField="status" class="hidden sm:table-cell">Status</x-table.cell>
                 <x-table.cell header class="text-center">Actions</x-table.cell>
             </x-table.head>
@@ -50,32 +48,6 @@
                             @if ($entry->incident_time)
                                 <span class="block text-xs">{{ \Carbon\Carbon::parse($entry->incident_time)->format('h:i A') }}</span>
                             @endif
-                        </x-table.cell>
-
-                        {{-- Location --}}
-                        <x-table.cell class="hidden md:table-cell align-middle text-gray-500 dark:text-zinc-400 max-w-xs truncate">
-                            {{ $entry->incident_location }}
-                        </x-table.cell>
-
-                        {{-- Parties --}}
-                        <x-table.cell class="hidden lg:table-cell align-middle">
-                            <div class="flex flex-col gap-1">
-                                @foreach ($entry->parties->take(2) as $party)
-                                    <div class="flex items-center gap-1.5">
-                                        <x-ui.badge variant="{{ match($party->role) {
-                                            \App\Enums\BlotterPartyRole::Complainant => 'info',
-                                            \App\Enums\BlotterPartyRole::Respondent  => 'danger',
-                                            \App\Enums\BlotterPartyRole::Witness     => 'warning',
-                                        } }}">
-                                            {{ ucfirst($party->role->value) }}
-                                        </x-ui.badge>
-                                        <span class="text-xs text-gray-600 dark:text-zinc-400">{{ $party->person->full_name }}</span>
-                                    </div>
-                                @endforeach
-                                @if ($entry->parties->count() > 2)
-                                    <span class="text-xs text-gray-400">+{{ $entry->parties->count() - 2 }} more</span>
-                                @endif
-                            </div>
                         </x-table.cell>
 
                         {{-- Status --}}
@@ -106,7 +78,7 @@
                     </x-table.row>
                 @empty
                     <x-table.row>
-                        <x-table.cell colspan="6" class="py-12 text-center text-gray-400 dark:text-zinc-500">
+                        <x-table.cell colspan="4" class="py-12 text-center text-gray-400 dark:text-zinc-500">
                             <svg class="mx-auto mb-3 w-10 h-10 text-gray-200 dark:text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>

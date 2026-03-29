@@ -40,7 +40,7 @@ class BlotterEntry extends Model
 
     public function parties(): HasMany
     {
-        return $this->hasMany(BlotterParty::class);
+        return $this->hasMany(BlotterParty::class, 'blotter_id');
     }
 
     public function dispute(): HasOne
