@@ -22,7 +22,7 @@ class Hearing extends Model
         'location',
         'status',
         'notes',
-        'conducted_by',
+        'judge_id',
     ];
 
     protected function casts(): array
@@ -38,9 +38,9 @@ class Hearing extends Model
         return $this->belongsTo(Dispute::class);
     }
 
-    public function conductor(): BelongsTo
+    public function judge(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'conducted_by');
+        return $this->belongsTo(Judge::class, 'judge_id');
     }
 
     public function attendees(): HasMany

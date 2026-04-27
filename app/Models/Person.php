@@ -20,12 +20,14 @@ class Person extends Model
         'birthdate',
         'address',
         'contact_number',
+        'is_criminal',
     ];
 
     protected function casts(): array
     {
         return [
             'birthdate' => 'date',
+            'is_criminal' => 'boolean',
         ];
     }
 
@@ -36,12 +38,17 @@ class Person extends Model
 
     public function getInitialsAttribute(): string
     {
-        return strtoupper(substr($this->first_name, 0, 1).substr($this->last_name, 0, 1));
+        return strtoupper(substr($this->first_name, 0, 1) . substr($this->last_name, 0, 1));
     }
 
     public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo ? Storage::url($this->photo) : null;
+    }
+
+    public function criminalRecords(): HasMany
+    {
+        return $this->hasMany(CriminalRecord::class);
     }
 
     public function blotterParties(): HasMany

@@ -82,16 +82,6 @@ class User extends Authenticatable
         return $this->hasMany(Dispute::class, 'filed_by');
     }
 
-    public function assignedDisputes(): HasMany
-    {
-        return $this->hasMany(Dispute::class, 'assigned_to');
-    }
-
-    public function hearings(): HasMany
-    {
-        return $this->hasMany(Hearing::class, 'conducted_by');
-    }
-
     public function resolutions(): HasMany
     {
         return $this->hasMany(Resolution::class, 'resolved_by');

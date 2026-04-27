@@ -22,7 +22,7 @@ class Dispute extends Model
         'description',
         'status',
         'filed_by',
-        'assigned_to',
+        'officer_id'
     ];
 
     protected function casts(): array
@@ -42,9 +42,9 @@ class Dispute extends Model
         return $this->belongsTo(User::class, 'filed_by');
     }
 
-    public function assignee(): BelongsTo
+    public function officer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(Officer::class, 'officer_id');
     }
 
     public function parties(): HasMany
