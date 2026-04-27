@@ -41,6 +41,16 @@
                 {{ __('Users') }}
             </flux:sidebar.item>
 
+            <flux:sidebar.item icon="shield-check" :href="route('officers.index')"
+                :current="request()->routeIs('officers.*')" wire:navigate>
+                {{ __('Officers') }}
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="briefcase" :href="route('judges.index')" :current="request()->routeIs('judges.*')"
+                wire:navigate>
+                {{ __('Judges') }}
+            </flux:sidebar.item>
+
             <flux:sidebar.item icon="users" :href="route('people.index')" :current="request()->routeIs('people.*')"
                 wire:navigate>
                 {{ __('People') }}

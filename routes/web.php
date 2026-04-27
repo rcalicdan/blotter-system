@@ -45,6 +45,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{hearing}/edit', App\Livewire\Hearings\UpdatePage::class)->name('edit');
         Route::get('/{hearing}', App\Livewire\Hearings\ViewPage::class)->name('view');
     });
+
+    Route::prefix('officers')->name('officers.')->group(function () {
+        Route::get('/', App\Livewire\Officers\TablePage::class)->name('index');
+        Route::get('/create', App\Livewire\Officers\CreatePage::class)->name('create');
+        Route::get('/{officer}/edit', App\Livewire\Officers\UpdatePage::class)->name('edit');
+    });
+
+    Route::prefix('judges')->name('judges.')->group(function () {
+        Route::get('/', App\Livewire\Judges\TablePage::class)->name('index');
+        Route::get('/create', App\Livewire\Judges\CreatePage::class)->name('create');
+        Route::get('/{judge}/edit', App\Livewire\Judges\UpdatePage::class)->name('edit');
+    });
 });
 
 require __DIR__ . '/settings.php';
