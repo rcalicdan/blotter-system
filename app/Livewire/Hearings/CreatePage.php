@@ -25,8 +25,8 @@ class CreatePage extends Component
     public string $location = '';
     public string $status = '';
     public string $notes = '';
-    public ?int $conducted_by = null;
-    public array $attendees = [];
+    public ?int $judge_id = null;
+    public array $attendees =[];
 
     public function mount(): void
     {
@@ -48,18 +48,18 @@ class CreatePage extends Component
     private function loadAttendeesFromDispute(): void
     {
         if (! $this->dispute_id) {
-            $this->attendees = [];
+            $this->attendees =[];
             return;
         }
 
         $dispute = Dispute::with('parties.person')->find($this->dispute_id);
 
         if (! $dispute) {
-            $this->attendees = [];
+            $this->attendees =[];
             return;
         }
 
-        $this->attendees = $dispute->parties->map(fn ($party) => [
+        $this->attendees = $dispute->parties->map(fn ($party) =>[
             'person_id' => $party->person_id,
             'name'      => $party->person->full_name,
             'role'      => $party->role->value,
@@ -69,16 +69,16 @@ class CreatePage extends Component
 
     protected function rules(): array
     {
-        return [
+        return[
             'dispute_id'            => ['required', 'exists:disputes,id'],
             'scheduled_date'        => ['required', 'date'],
-            'scheduled_time'        => ['nullable', 'date_format:H:i'],
-            'location'              => ['required', 'string', 'max:500'],
-            'status'                => ['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
+            'scheduled_time'        =>['nullable', 'date_format:H:i'],
+            'location'              =>['required', 'string', 'max:500'],
+            'status'                =>['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
             'notes'                 => ['nullable', 'string'],
-            'conducted_by'          => ['nullable', 'exists:users,id'],
+            'judge_id'              => ['nullable', 'exists:judges,id'],
             'attendees'             => ['nullable', 'array'],
-            'attendees.*.person_id' => ['required', 'exists:people,id'],
+            'attendees.*.person_id' =>['required', 'exists:people,id'],
             'attendees.*.attended'  => ['boolean'],
         ];
     }
@@ -95,10 +95,10 @@ class CreatePage extends Component
                 'location'       => $validated['location'],
                 'status'         => $validated['status'],
                 'notes'          => $validated['notes'],
-                'conducted_by'   => $validated['conducted_by'],
+                'judge_id'       => $validated['judge_id'],
             ]);
 
-            foreach ($validated['attendees'] ?? [] as $attendee) {
+            foreach ($validated['attendees'] ??[] as $attendee) {
                 HearingAttendee::create([
                     'hearing_id' => $hearing->id,
                     'person_id'  => $attendee['person_id'],
@@ -114,7 +114,7 @@ class CreatePage extends Component
 
     public function render()
     {
-        return view('livewire.hearings.create-page', [
+        return view('livewire.hearings.create-page',[
             'statuses' => HearingStatus::cases(),
         ]);
     }

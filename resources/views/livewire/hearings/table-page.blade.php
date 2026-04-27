@@ -30,7 +30,7 @@
                 <x-table.cell header sortable sortField="scheduled_date">Schedule</x-table.cell>
                 <x-table.cell header class="hidden md:table-cell">Dispute</x-table.cell>
                 <x-table.cell header class="hidden lg:table-cell">Location</x-table.cell>
-                <x-table.cell header class="hidden md:table-cell">Conducted By</x-table.cell>
+                <x-table.cell header class="hidden md:table-cell">Presiding Judge</x-table.cell>
                 <x-table.cell header sortable sortField="status" class="hidden sm:table-cell">Status</x-table.cell>
                 <x-table.cell header class="text-center">Actions</x-table.cell>
             </x-table.head>
@@ -38,7 +38,6 @@
             <x-table.body>
                 @forelse ($hearings as $hearing)
                     <x-table.row wire:key="hearing-{{ $hearing->id }}">
-                        {{-- Schedule --}}
                         <x-table.cell class="align-middle">
                             <p class="font-semibold text-gray-900 dark:text-white">
                                 {{ $hearing->scheduled_date->format('M d, Y') }}
@@ -50,7 +49,6 @@
                             @endif
                         </x-table.cell>
 
-                        {{-- Dispute --}}
                         <x-table.cell class="hidden md:table-cell align-middle">
                             <a href="{{ route('disputes.view', $hearing->dispute) }}"
                                 class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
@@ -61,17 +59,14 @@
                             </p>
                         </x-table.cell>
 
-                        {{-- Location --}}
                         <x-table.cell class="hidden lg:table-cell align-middle text-gray-500 dark:text-zinc-400">
                             {{ $hearing->location }}
                         </x-table.cell>
 
-                        {{-- Conducted By --}}
                         <x-table.cell class="hidden md:table-cell align-middle text-gray-500 dark:text-zinc-400">
-                            {{ $hearing->conductor?->name ?? '—' }}
+                            {{ $hearing->judge?->full_name ?? '—' }}
                         </x-table.cell>
 
-                        {{-- Status --}}
                         <x-table.cell class="hidden sm:table-cell align-middle">
                             <x-ui.badge variant="{{ match($hearing->status) {
                                 \App\Enums\HearingStatus::Scheduled => 'info',
@@ -82,7 +77,6 @@
                             </x-ui.badge>
                         </x-table.cell>
 
-                        {{-- Actions --}}
                         <x-table.cell class="text-center align-middle">
                             <div class="flex items-center justify-center gap-2">
                                 <x-ui.view-button :href="route('hearings.view', $hearing)" />

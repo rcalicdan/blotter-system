@@ -20,10 +20,10 @@ class ViewPage extends Component
 
         $this->dispute = $dispute->load([
             'filer',
-            'assignee',
+            'officer',
             'parties.person',
             'blotterEntry',
-            'hearings.conductor',
+            'hearings.judge',
             'resolution',
         ]);
     }

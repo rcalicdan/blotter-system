@@ -24,8 +24,8 @@ class UpdatePage extends Component
     public string $location = '';
     public string $status = '';
     public string $notes = '';
-    public ?int $conducted_by = null;
-    public array $attendees = [];
+    public ?int $judge_id = null;
+    public array $attendees =[];
 
     public function mount(Hearing $hearing): void
     {
@@ -38,10 +38,9 @@ class UpdatePage extends Component
         $this->location       = $hearing->location;
         $this->status         = $hearing->status->value;
         $this->notes          = $hearing->notes ?? '';
-        $this->conducted_by   = $hearing->conducted_by;
+        $this->judge_id       = $hearing->judge_id;
 
-        // Load existing attendees
-        $this->attendees = $hearing->attendees->map(fn ($attendee) => [
+        $this->attendees = $hearing->attendees->map(fn ($attendee) =>[
             'person_id' => $attendee->person_id,
             'name'      => $attendee->person->full_name,
             'role'      => $this->resolvePartyRole($attendee->person_id),
@@ -62,14 +61,14 @@ class UpdatePage extends Component
         return [
             'dispute_id'            => ['required', 'exists:disputes,id'],
             'scheduled_date'        => ['required', 'date'],
-            'scheduled_time'        => ['nullable', 'date_format:H:i'],
-            'location'              => ['required', 'string', 'max:500'],
-            'status'                => ['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
-            'notes'                 => ['nullable', 'string'],
-            'conducted_by'          => ['nullable', 'exists:users,id'],
+            'scheduled_time'        =>['nullable', 'date_format:H:i'],
+            'location'              =>['required', 'string', 'max:500'],
+            'status'                =>['required', 'string', 'in:'.implode(',', array_column(HearingStatus::cases(), 'value'))],
+            'notes'                 =>['nullable', 'string'],
+            'judge_id'              => ['nullable', 'exists:judges,id'],
             'attendees'             => ['nullable', 'array'],
             'attendees.*.person_id' => ['required', 'exists:people,id'],
-            'attendees.*.attended'  => ['boolean'],
+            'attendees.*.attended'  =>['boolean'],
         ];
     }
 
@@ -85,7 +84,7 @@ class UpdatePage extends Component
                 'location'       => $validated['location'],
                 'status'         => $validated['status'],
                 'notes'          => $validated['notes'],
-                'conducted_by'   => $validated['conducted_by'],
+                'judge_id'       => $validated['judge_id'],
             ]);
 
             $this->hearing->attendees()->delete();
@@ -106,7 +105,7 @@ class UpdatePage extends Component
 
     public function render()
     {
-        return view('livewire.hearings.update-page', [
+        return view('livewire.hearings.update-page',[
             'statuses' => HearingStatus::cases(),
         ]);
     }

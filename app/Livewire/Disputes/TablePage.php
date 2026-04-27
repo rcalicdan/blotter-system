@@ -55,13 +55,15 @@ class TablePage extends Component
     public function render()
     {
         $disputes = Dispute::query()
-            ->with(['filer', 'assignee', 'parties.person', 'blotterEntry'])
-            ->when($this->search, fn ($query) => $query
-                ->where('case_number', 'like', "%{$this->search}%")
-                ->orWhere('subject', 'like', "%{$this->search}%")
+            ->with(['filer', 'officer', 'parties.person', 'blotterEntry'])
+            ->when(
+                $this->search,
+                fn($query) => $query
+                    ->where('case_number', 'like', "%{$this->search}%")
+                    ->orWhere('subject', 'like', "%{$this->search}%")
             )
-            ->when($this->statusFilter, fn ($query) => $query->where('status', $this->statusFilter))
-            ->tap(fn ($query) => $this->applySorting($query))
+            ->when($this->statusFilter, fn($query) => $query->where('status', $this->statusFilter))
+            ->tap(fn($query) => $this->applySorting($query))
             ->paginate(10);
 
         return view('livewire.disputes.table-page', [

@@ -21,8 +21,8 @@ class CreatePage extends Component
     public string $description = '';
     public string $status = '';
     public ?int $blotter_id = null;
-    public ?int $assigned_to = null;
-    public array $parties = [];
+    public ?int $officer_id = null;
+    public array $parties =[];
 
     public function mount(): void
     {
@@ -31,9 +31,7 @@ class CreatePage extends Component
         $this->status      = DisputeStatus::Filed->value;
         $this->case_number = $this->generateCaseNumber();
 
-        $this->parties = [
-            ['person_id' => null, 'role' => DisputePartyRole::Complainant->value],
-            ['person_id' => null, 'role' => DisputePartyRole::Respondent->value],
+        $this->parties = [['person_id' => null, 'role' => DisputePartyRole::Complainant->value],['person_id' => null, 'role' => DisputePartyRole::Respondent->value],
         ];
     }
 
@@ -48,21 +46,21 @@ class CreatePage extends Component
     protected function rules(): array
     {
         return [
-            'case_number'       => ['required', 'string', 'max:255', 'unique:disputes,case_number'],
-            'subject'           => ['required', 'string', 'max:500'],
-            'description'       => ['nullable', 'string'],
-            'status'            => ['required', 'string', 'in:'.implode(',', array_column(DisputeStatus::cases(), 'value'))],
-            'blotter_id'        => ['nullable', 'exists:blotter_entries,id'],
-            'assigned_to'       => ['nullable', 'exists:users,id'],
-            'parties'           => ['required', 'array', 'min:2'],
+            'case_number'         =>['required', 'string', 'max:255', 'unique:disputes,case_number'],
+            'subject'             =>['required', 'string', 'max:500'],
+            'description'         => ['nullable', 'string'],
+            'status'              =>['required', 'string', 'in:'.implode(',', array_column(DisputeStatus::cases(), 'value'))],
+            'blotter_id'          =>['nullable', 'exists:blotter_entries,id'],
+            'officer_id'          =>['nullable', 'exists:officers,id'],
+            'parties'             => ['required', 'array', 'min:2'],
             'parties.*.person_id' => ['required', 'exists:people,id'],
-            'parties.*.role'      => ['required', 'string', 'in:'.implode(',', array_column(DisputePartyRole::cases(), 'value'))],
+            'parties.*.role'      =>['required', 'string', 'in:'.implode(',', array_column(DisputePartyRole::cases(), 'value'))],
         ];
     }
 
     protected function messages(): array
     {
-        return [
+        return[
             'parties.*.person_id.required' => 'Please select a person for each party.',
             'parties.*.person_id.exists'   => 'The selected person does not exist.',
             'parties.*.role.required'      => 'Please select a role for each party.',
@@ -71,7 +69,7 @@ class CreatePage extends Component
 
     public function addParty(): void
     {
-        $this->parties[] = ['person_id' => null, 'role' => DisputePartyRole::Complainant->value];
+        $this->parties[] =['person_id' => null, 'role' => DisputePartyRole::Complainant->value];
     }
 
     public function removeParty(int $index): void
@@ -94,7 +92,7 @@ class CreatePage extends Component
                 'description' => $validated['description'],
                 'status'      => $validated['status'],
                 'blotter_id'  => $validated['blotter_id'],
-                'assigned_to' => $validated['assigned_to'],
+                'officer_id'  => $validated['officer_id'],
                 'filed_by'    => auth()->id(),
             ]);
 
@@ -114,7 +112,7 @@ class CreatePage extends Component
 
     public function render()
     {
-        return view('livewire.disputes.create-page', [
+        return view('livewire.disputes.create-page',[
             'statuses'   => DisputeStatus::cases(),
             'partyRoles' => DisputePartyRole::cases(),
         ]);

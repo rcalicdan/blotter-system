@@ -30,7 +30,7 @@
                 <x-table.cell header sortable sortField="case_number">Case #</x-table.cell>
                 <x-table.cell header sortable sortField="subject" class="hidden md:table-cell">Subject</x-table.cell>
                 <x-table.cell header class="hidden lg:table-cell">Parties</x-table.cell>
-                <x-table.cell header class="hidden md:table-cell">Assigned To</x-table.cell>
+                <x-table.cell header class="hidden md:table-cell">Investigating Officer</x-table.cell>
                 <x-table.cell header sortable sortField="status" class="hidden sm:table-cell">Status</x-table.cell>
                 <x-table.cell header class="text-center">Actions</x-table.cell>
             </x-table.head>
@@ -38,7 +38,6 @@
             <x-table.body>
                 @forelse ($disputes as $dispute)
                     <x-table.row wire:key="dispute-{{ $dispute->id }}">
-                        {{-- Case Number --}}
                         <x-table.cell class="align-middle">
                             <p class="font-semibold text-gray-900 dark:text-white">{{ $dispute->case_number }}</p>
                             <p class="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">{{ $dispute->created_at->format('M d, Y') }}</p>
@@ -47,12 +46,10 @@
                             @endif
                         </x-table.cell>
 
-                        {{-- Subject --}}
                         <x-table.cell class="hidden md:table-cell align-middle text-gray-600 dark:text-zinc-300 max-w-xs truncate">
                             {{ $dispute->subject }}
                         </x-table.cell>
 
-                        {{-- Parties --}}
                         <x-table.cell class="hidden lg:table-cell align-middle">
                             <div class="flex flex-col gap-1">
                                 @foreach ($dispute->parties as $party)
@@ -66,12 +63,10 @@
                             </div>
                         </x-table.cell>
 
-                        {{-- Assigned To --}}
                         <x-table.cell class="hidden md:table-cell align-middle text-gray-500 dark:text-zinc-400">
-                            {{ $dispute->assignee?->name ?? '—' }}
+                            {{ $dispute->officer?->full_name ?? '—' }}
                         </x-table.cell>
 
-                        {{-- Status --}}
                         <x-table.cell class="hidden sm:table-cell align-middle">
                             <x-ui.badge variant="{{ match($dispute->status) {
                                 \App\Enums\DisputeStatus::Filed     => 'info',
@@ -84,7 +79,6 @@
                             </x-ui.badge>
                         </x-table.cell>
 
-                        {{-- Actions --}}
                         <x-table.cell class="text-center align-middle">
                             <div class="flex items-center justify-center gap-2">
                                 <x-ui.view-button :href="route('disputes.view', $dispute)" />

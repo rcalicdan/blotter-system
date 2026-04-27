@@ -29,7 +29,7 @@
     </div>
 </x-form.grid>
 
-<x-form.section title="References" description="Optionally link to a blotter entry and assign an officer.">
+<x-form.section title="References" description="Optionally link to a blotter entry and assign an investigating officer.">
     <x-form.grid :cols="2">
         <div>
             <x-form.label>Linked Blotter Entry</x-form.label>
@@ -42,10 +42,10 @@
         </div>
 
         <div>
-            <x-form.label>Assigned Officer</x-form.label>
-            <livewire:forms.searchable-dropdown wire:model="assigned_to" :model="\App\Models\User::class" :searchFields="['first_name', 'last_name', 'email']"
-                displayField="name" :subLabelFields="['email']" placeholder="Search officer..." key="officer-dropdown" />
-            @error('assigned_to')
+            <x-form.label>Investigating Officer</x-form.label>
+            <livewire:forms.searchable-dropdown wire:model="officer_id" :model="\App\Models\Officer::class" :searchFields="['first_name', 'last_name', 'badge_number']"
+                displayField="full_name" :subLabelFields="['badge_number', 'rank']" placeholder="Search officer..." key="officer-dropdown" />
+            @error('officer_id')
                 <p class="text-red-500 text-xs mt-1.5 font-medium">{{ $message }}</p>
             @enderror
         </div>

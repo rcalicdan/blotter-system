@@ -55,13 +55,15 @@ class TablePage extends Component
     public function render()
     {
         $hearings = Hearing::query()
-            ->with(['dispute', 'conductor', 'attendees.person'])
-            ->when($this->search, fn ($query) => $query
-                ->where('location', 'like', "%{$this->search}%")
-                ->orWhereHas('dispute', fn ($q) => $q->where('case_number', 'like', "%{$this->search}%"))
+            ->with(['dispute', 'judge', 'attendees.person'])
+            ->when(
+                $this->search,
+                fn($query) => $query
+                    ->where('location', 'like', "%{$this->search}%")
+                    ->orWhereHas('dispute', fn($q) => $q->where('case_number', 'like', "%{$this->search}%"))
             )
-            ->when($this->statusFilter, fn ($query) => $query->where('status', $this->statusFilter))
-            ->tap(fn ($query) => $this->applySorting($query))
+            ->when($this->statusFilter, fn($query) => $query->where('status', $this->statusFilter))
+            ->tap(fn($query) => $this->applySorting($query))
             ->paginate(10);
 
         return view('livewire.hearings.table-page', [
