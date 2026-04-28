@@ -57,6 +57,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create', App\Livewire\Judges\CreatePage::class)->name('create');
         Route::get('/{judge}/edit', App\Livewire\Judges\UpdatePage::class)->name('edit');
     });
+
+    Route::prefix('people')->name('people.')->group(function () {
+        Route::get('/', App\Livewire\People\TablePage::class)->name('index');
+        Route::get('/create', App\Livewire\People\CreatePage::class)->name('create');
+        Route::get('/{person}/edit', App\Livewire\People\UpdatePage::class)->name('edit');
+
+        Route::get('/{person}', App\Livewire\People\ViewPage::class)->name('view');
+        Route::get('/{person}/records/create', App\Livewire\CriminalRecords\CreatePage::class)->name('records.create');
+    });
+
+    Route::prefix('records')->name('records.')->group(function () {
+        Route::get('/{record}/edit', App\Livewire\CriminalRecords\UpdatePage::class)->name('edit');
+    });
+
+    Route::prefix('criminals')->name('criminals.')->group(function () {
+        Route::get('/', App\Livewire\Criminals\TablePage::class)->name('index');
+    });
 });
 
 require __DIR__ . '/settings.php';

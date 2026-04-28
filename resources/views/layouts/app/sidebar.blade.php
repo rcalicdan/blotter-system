@@ -56,6 +56,11 @@
                 {{ __('People') }}
             </flux:sidebar.item>
 
+            <flux:sidebar.item icon="finger-print" :href="route('criminals.index')"
+                :current="request()->routeIs('criminals.*')" wire:navigate class="text-red-600 dark:text-red-400">
+                {{ __('Criminals') }}
+            </flux:sidebar.item>
+
             <flux:sidebar.item icon="document-text" :href="route('blotters.index')"
                 :current="request()->routeIs('blotters.*')" wire:navigate>
                 {{ __('Blotter') }}
