@@ -19,7 +19,7 @@ class ViewPage extends Component
 
         $this->hearing = $hearing->load([
             'dispute.parties.person',
-            'conductor',
+            'judge', 
             'attendees.person',
             'resolution',
         ]);
